@@ -48,8 +48,11 @@ namespace RemoteDebugHelper
         private void DoDevJob()
         {
             var sourcePath = @"c:\inetpub\wwwroot\NextQiagen\Website\bin\";
+            var targetPath = Path.Combine(@"u:\", "remoteDebug");
+
             var extsToAdd = new[] { ".dll", ".pdb" };
             var filesToAdd = Directory.GetFiles(sourcePath).Where(f => extsToAdd.Contains(Path.GetExtension(f)));
+
             var zipName = $"bin_{DateTime.Now:yyyyMMdd_hhmmss}.zip";
             var zipPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "bugfixing", zipName);
 
@@ -61,11 +64,10 @@ namespace RemoteDebugHelper
                 Console.WriteLine("ZIP created");
             }
 
-            var targetPath = Path.Combine("u:", "remoteDebug");
-
             if (Directory.Exists(targetPath))
             {
-                var oldFilesOnTarget = Directory.GetFiles(targetPath, "bin_*.zip");
+                var oldFilesOnTarget = Directory.GetFiles(targetPath, "bin_*.zip")
+                    .Where(f => !string.Equals(f, zipPath, StringComparison.OrdinalIgnoreCase));
 
                 if (oldFilesOnTarget.Any())
                 {
@@ -77,9 +79,6 @@ namespace RemoteDebugHelper
             {
                 Directory.CreateDirectory(targetPath);
             }
-
-            File.Move(zipPath, Path.Combine(targetPath, zipName));
-            Console.WriteLine("File moved");
         }
 
         void DoEnvJob(string zipPath, string websitePath)

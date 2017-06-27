@@ -7,7 +7,11 @@ namespace RemoteDebugHelper
     {
         static void Main(string[] args)
         {
-            Container container = ConfigureContainer();
+            var container = ConfigureContainer();
+
+            if (!container.GetInstance<IAdminUtils>().EnsureRunningAsAdmin(args))
+                return;
+
             SetupJobFactory(container);
 
             try
@@ -36,6 +40,7 @@ namespace RemoteDebugHelper
         {
             var container = new Container();
 
+            container.Register<IAdminUtils, AdminUtils>();
             container.Register<ICommandLineSupport, CommandLineSupport>();
             container.Register<IProgressSupport, ConsoleProgressSupport>();
             container.Register<IConfigurationReader, ConfigurationReader>();

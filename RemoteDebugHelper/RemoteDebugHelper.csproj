@@ -31,12 +31,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
     </Reference>
     <Reference Include="FluentCommandLineParser, Version=1.4.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentCommandLineParser.1.4.3\lib\net35\FluentCommandLineParser.dll</HintPath>
+    </Reference>
+    <Reference Include="Konsole, Version=2.0.2.17316, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Goblinfactory.Konsole.3.0.1\lib\net45\Konsole.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="SimpleInjector, Version=4.0.8.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
@@ -55,10 +65,14 @@
   <ItemGroup>
     <Compile Include="CommandLineSupport.cs" />
     <Compile Include="ConfigurationReader.cs" />
+    <Compile Include="ConsoleProgressSupport.cs" />
+    <Compile Include="IProgressSupport.cs" />
+    <Compile Include="Consts.cs" />
+    <Compile Include="Jobs\JobFactory.cs" />
     <Compile Include="Jobs\CopyIntoWebsiteBin.cs" />
     <Compile Include="IConfigurationReader.cs" />
-    <Compile Include="IJob.cs" />
-    <Compile Include="IJobFactory.cs" />
+    <Compile Include="Jobs\IJob.cs" />
+    <Compile Include="Jobs\IJobFactory.cs" />
     <Compile Include="Jobs\CopyFilesToRemote.cs" />
     <Compile Include="Enums\Mode.cs" />
     <Compile Include="ICommandLineSupport.cs" />
@@ -69,6 +83,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="LocalConfiguration.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

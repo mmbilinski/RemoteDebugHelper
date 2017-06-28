@@ -12,5 +12,10 @@ namespace RemoteDebugHelper
 
             throw new SettingsPropertyNotFoundException();
         }
+
+        public bool GetBoolValue(string key)
+        {
+            return bool.TryParse(GetValue(key), out bool result) && result;
+        }
     }
 }

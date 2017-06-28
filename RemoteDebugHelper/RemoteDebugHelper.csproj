@@ -8,9 +8,10 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>RemoteDebugHelper</RootNamespace>
     <AssemblyName>RemoteDebugHelper</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -63,15 +64,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utils\AdminUtils.cs" />
+    <Compile Include="Jobs\CleanupRemoteEnvironment.cs" />
+    <Compile Include="Utils\SystemUtils.cs" />
     <Compile Include="Utils\CommandLineSupport.cs" />
     <Compile Include="Utils\ConfigurationReader.cs" />
     <Compile Include="Utils\ConsoleProgressSupport.cs" />
-    <Compile Include="Utils\IAdminUtils.cs" />
+    <Compile Include="Utils\ISystemUtils.cs" />
     <Compile Include="Utils\IProgressSupport.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="Jobs\JobFactory.cs" />
-    <Compile Include="Jobs\CopyIntoWebsiteBin.cs" />
+    <Compile Include="Jobs\PrepareRemoteEnvironment.cs" />
     <Compile Include="Utils\IConfigurationReader.cs" />
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\IJobFactory.cs" />

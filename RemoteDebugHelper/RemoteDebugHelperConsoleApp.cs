@@ -1,5 +1,6 @@
 ﻿using SimpleInjector;
 using System;
+using System.Reflection;
 
 namespace RemoteDebugHelper
 {
@@ -7,15 +8,17 @@ namespace RemoteDebugHelper
     {
         static void Main(string[] args)
         {
-            var container = ConfigureContainer();
-
-            if (!container.GetInstance<IAdminUtils>().EnsureRunningAsAdmin(args))
-                return;
-
-            SetupJobFactory(container);
+            Console.WriteLine($"Remote debug helper v{Assembly.GetExecutingAssembly().GetName().Version} started");
 
             try
             {
+                var container = ConfigureContainer();
+
+                //if (!container.GetInstance<ISystemUtils>().EnsureRunningAsAdmin(args))
+                //    return;
+
+                SetupJobFactory(container);
+
                 var app = new RemoteDebugHelperConsoleApp();
                 app.RunApplication(container, args);
             }
@@ -24,6 +27,7 @@ namespace RemoteDebugHelper
                 Console.WriteLine(e.Message);
             }
 
+            Console.Write("Done.");
             Console.ReadKey(true);
         }
 
@@ -33,6 +37,8 @@ namespace RemoteDebugHelper
             var runArguments = commandLineSupport.Setup(args);
             var job = container.GetInstance<IJobFactory>().GetJob(container, runArguments.Side, runArguments.Mode);
 
+            Console.WriteLine($"You are on {runArguments.Side} and I'll try to do {runArguments.Mode} action");
+
             job.PleaseDoTheNeedful(runArguments);
         }
 
@@ -40,7 +46,7 @@ namespace RemoteDebugHelper
         {
             var container = new Container();
 
-            container.Register<IAdminUtils, AdminUtils>();
+            container.Register<ISystemUtils, SystemUtils>();
             container.Register<ICommandLineSupport, CommandLineSupport>();
             container.Register<IProgressSupport, ConsoleProgressSupport>();
             container.Register<IConfigurationReader, ConfigurationReader>();
@@ -56,7 +62,8 @@ namespace RemoteDebugHelper
             var jobFactory = container.GetInstance<IJobFactory>();
 
             jobFactory.RegisterJob<CopyFilesToRemote>(Side.Dev, Mode.Any);
-            jobFactory.RegisterJob<CopyIntoWebsiteBin>(Side.Env, Mode.Start);
+            jobFactory.RegisterJob<PrepareRemoteEnvironment>(Side.Env, Mode.Start);
+            jobFactory.RegisterJob<CleanupRemoteEnvironment>(Side.Env, Mode.Finish);
         }
     }
 }

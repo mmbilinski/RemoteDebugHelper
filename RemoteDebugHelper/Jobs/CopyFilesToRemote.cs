@@ -18,9 +18,9 @@ namespace RemoteDebugHelper
 
         public void PleaseDoTheNeedful(RunArguments runArguments)
         {
-            var sourcePath = _configurationReader.GetValue(Consts.LocalWebsiteBinDirectoryConfigKey);
-            var targetPath = _configurationReader.GetValue(Consts.IntermediateZipDirectoryConfigKey);
-            var extsToAdd = _configurationReader.GetValue(Consts.TransferredExtensionsConfigKey).Split('|');
+            var sourcePath = _configurationReader.GetValue(Consts.ConfigKeys.LocalWebsiteBinDirectory);
+            var targetPath = _configurationReader.GetValue(Consts.ConfigKeys.IntermediateZipDirectory);
+            var extsToAdd = _configurationReader.GetValue(Consts.ConfigKeys.TransferredExtensions).Split('|');
 
             var filesToAdd = Directory.GetFiles(sourcePath).Where(f => extsToAdd.Contains(Path.GetExtension(f))).ToArray();
             var zipName = $"bin_{DateTime.Now:yyyyMMdd_hhmmss}.zip";

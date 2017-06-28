@@ -1,0 +1,62 @@
+using System;
+using System.IO;
+
+namespace RemoteDebugHelper
+{
+    internal class CleanupRemoteEnvironment : IJob
+    {
+        private readonly IProgressSupport _progressSupport;
+        private readonly IConfigurationReader _configurationReader;
+        private readonly ISystemUtils _systemUtils;
+
+        public CleanupRemoteEnvironment(IProgressSupport progressSupport, IConfigurationReader configurationReader,
+            ISystemUtils systemUtils)
+        {
+            _progressSupport = progressSupport;
+            _configurationReader = configurationReader;
+            _systemUtils = systemUtils;
+        }
+
+        public void PleaseDoTheNeedful(RunArguments runArguments)
+        {
+            var websitePath = _configurationReader.GetValue(Consts.ConfigKeys.RemoteWebsiteDirectory);
+            var userInitials = _configurationReader.GetValue(Consts.ConfigKeys.UserInitials);
+            var binInitialsPath = Path.Combine(websitePath, $"bin{userInitials}");
+            var binProdFolderName = _configurationReader.GetValue(Consts.ConfigKeys.BinDirectoryNameForProductionBinaries);
+            var binProdPath = Path.Combine(websitePath, binProdFolderName);
+            var binPath = Path.Combine(websitePath, "bin");
+
+            // if bin<initials> is already there, delete or rename it
+            if (Directory.Exists(binInitialsPath))
+            {
+                if (_configurationReader.GetBoolValue(Consts.ConfigKeys.KeepRemoteBinWithInitials))
+                {
+                    Directory.Move(binInitialsPath,
+                    Path.Combine(websitePath, $"{binInitialsPath}_{DateTime.Now:yyyyMMdd_hhmmss}"));
+                }
+                else
+                {
+                    Directory.Delete(binInitialsPath, true);
+                }
+            }
+
+            // ensure existance of production binaries
+            if (!Directory.Exists(binProdPath))
+            {
+                throw new InvalidOperationException("Cannot find a backup folder with production binaries.");
+            }
+
+            // delete development binaries
+            Directory.Move(binPath, binInitialsPath);
+
+            // move binProd to bin
+            Directory.Move(binProdPath, binPath);
+
+            // refresh AppPool
+            _systemUtils.RecycleAppPool();
+
+            // close remote debugger
+            _systemUtils.CloseRemoteDebugger(true);
+        }
+    }
+}

@@ -4,5 +4,6 @@ namespace RemoteDebugHelper
     {
         string GetValue(string key);
         bool GetBoolValue(string key);
+        int? GetIntValue(string key);
     }
 }

@@ -17,5 +17,10 @@ namespace RemoteDebugHelper
         {
             return bool.TryParse(GetValue(key), out bool result) && result;
         }
+
+        public int? GetIntValue(string key)
+        {
+            return int.TryParse(GetValue(key), out int result) ? result : (int?)null;
+        }
     }
 }

@@ -18,12 +18,9 @@ namespace RemoteDebugHelper
 
         public void PleaseDoTheNeedful(RunArguments runArguments)
         {
-            var sourcePath = _configurationReader.GetValue(Consts.ConfigKeys.LocalWebsiteBinDirectory);
             var targetPath = _configurationReader.GetValue(Consts.ConfigKeys.IntermediateZipDirectory);
-            var extsToAdd = _configurationReader.GetValue(Consts.ConfigKeys.TransferredExtensions).Split('|');
-
-            var filesToAdd = Directory.GetFiles(sourcePath).Where(f => extsToAdd.Contains(Path.GetExtension(f))).ToArray();
-            var zipName = $"bin_{DateTime.Now:yyyyMMdd_hhmmss}.zip";
+            var filesToAdd = GetFilesToTransfer();
+            var zipName = $"bin_{DateTime.Now:yyyyMMdd_HHmmss}.zip";
             var zipPath = Path.Combine(targetPath, zipName);
 
             _progressSupport.SetupProgress(filesToAdd.Length);
@@ -37,6 +34,22 @@ namespace RemoteDebugHelper
                 zip.Save();
                 Console.WriteLine("ZIP created");
             }
+        }
+
+        private string[] GetFilesToTransfer()
+        {
+            var sourcePath = _configurationReader.GetValue(Consts.ConfigKeys.LocalWebsiteBinDirectory);
+            var extsToAdd = _configurationReader.GetValue(Consts.ConfigKeys.TransferredExtensions).Split('|');
+            var filesToTransfer = new DirectoryInfo(sourcePath).GetFiles().Where(f => extsToAdd.Contains(f.Extension));
+            var includeFilesFromLastNDays = _configurationReader.GetIntValue(Consts.ConfigKeys.IncludeOnlyFilesModifiedInLastNDays);
+
+            if (includeFilesFromLastNDays.HasValue && includeFilesFromLastNDays.Value >= 0)
+            {
+                filesToTransfer = filesToTransfer
+                    .Where(f => f.LastWriteTime > DateTime.Today.AddDays(-includeFilesFromLastNDays.Value));
+            }
+
+            return filesToTransfer.Select(f => f.FullName).ToArray();
         }
 
         private static void PrepareDirectory(string targetPath, string zipPath)

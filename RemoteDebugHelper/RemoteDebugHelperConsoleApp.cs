@@ -69,6 +69,7 @@ namespace RemoteDebugHelper
             jobFactory.RegisterJob<CopyFilesToRemote>(Side.Dev, Mode.Any);
             jobFactory.RegisterJob<PrepareRemoteEnvironment>(Side.Env, Mode.Start);
             jobFactory.RegisterJob<CleanupRemoteEnvironment>(Side.Env, Mode.Finish);
+            jobFactory.RegisterJob<InteractiveRemoteEnvironment>(Side.Env, Mode.Interactive);
         }
     }
 }

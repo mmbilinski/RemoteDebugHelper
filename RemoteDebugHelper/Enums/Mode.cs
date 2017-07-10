@@ -4,6 +4,7 @@ namespace RemoteDebugHelper
     {
         Any,
         Start,
-        Finish
+        Finish,
+        Interactive
     }
 }

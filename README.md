@@ -2,7 +2,7 @@
 
 ## Usage
 
-    RemoteDebugHelper <-s dev|env> [-m start|finish]
+    RemoteDebugHelper <-s dev|env> [-m start|finish|interactive]
 
 * ```-s``` (required) indicates a side where app is run:
   * ```dev``` - developers machine
@@ -10,6 +10,7 @@
 * ```-m``` chooses run mode for ```env``` side:
   * ```start``` - starts debugging session
   * ```finish``` - ends debugging session
+  * ```interactive``` - starts interactive debugging session (```start``` with ```finish``` after Ctrl+C)
  
 ## Sample configuration
 

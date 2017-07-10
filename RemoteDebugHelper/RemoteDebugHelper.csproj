@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Jobs\CleanupRemoteEnvironment.cs" />
+    <Compile Include="Jobs\InteractiveRemoteEnvironment.cs" />
     <Compile Include="Utils\SystemUtils.cs" />
     <Compile Include="Utils\CommandLineSupport.cs" />
     <Compile Include="Utils\ConfigurationReader.cs" />

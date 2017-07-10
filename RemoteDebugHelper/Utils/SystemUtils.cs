@@ -44,7 +44,9 @@ namespace RemoteDebugHelper
             if (!string.IsNullOrWhiteSpace(rdPath))
             {
                 var rdArgs = _configurationReader.GetValue(Consts.ConfigKeys.RemoteDebuggerParameters);
-                StartProcessAsAdmin(rdPath, new[] { rdArgs });
+                var minimizedWindow = _configurationReader.GetBoolValue(Consts.ConfigKeys.RemoteDebuggerMinimized);
+
+                StartProcessAsAdmin(rdPath, new[] { rdArgs }, minimizedWindow);
             }
 
             return true;
@@ -114,7 +116,7 @@ namespace RemoteDebugHelper
             return appPool ?? throw new InvalidOperationException("App pool not found");
         }
 
-        private bool StartProcessAsAdmin(string path, string[] args)
+        private bool StartProcessAsAdmin(string path, string[] args, bool minimizedWindow = false)
         {
             var p = new Process
             {
@@ -122,7 +124,8 @@ namespace RemoteDebugHelper
                 {
                     Verb = "runas",
                     Arguments = string.Join(" ", args),
-                    UseShellExecute = false
+                    UseShellExecute = false,
+                    WindowStyle = minimizedWindow ? ProcessWindowStyle.Minimized : ProcessWindowStyle.Normal
                 }
             };
 

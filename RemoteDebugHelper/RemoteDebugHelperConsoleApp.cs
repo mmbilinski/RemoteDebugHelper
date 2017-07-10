@@ -26,9 +26,6 @@ namespace RemoteDebugHelper
             {
                 Console.WriteLine(e.Message);
             }
-
-            Console.Write("Done.");
-            Console.ReadKey(true);
         }
 
         private void RunApplication(Container container, string[] args)
@@ -40,6 +37,14 @@ namespace RemoteDebugHelper
             Console.WriteLine($"You are on {runArguments.Side} and I'll try to do {runArguments.Mode} action");
 
             job.PleaseDoTheNeedful(runArguments);
+
+            Console.Write("Done.");
+
+            var configuration = container.GetInstance<IConfigurationReader>();
+            if (!configuration.GetBoolValue(Consts.ConfigKeys.AutoCloseApp))
+            {
+                Console.ReadKey(true);
+            }
         }
 
         private static Container ConfigureContainer()

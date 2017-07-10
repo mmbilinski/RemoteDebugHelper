@@ -15,7 +15,9 @@ namespace RemoteDebugHelper
             internal const string KeepRemoteBinWithInitials = "KeepRemoteBinWithInitials";
             internal const string RemoteDebuggerPath = "RemoteDebuggerPath";
             internal const string RemoteDebuggerParameters = "RemoteDebuggerParameters";
+            internal const string RemoteDebuggerMinimized = "RemoteDebuggerMinimized";
             internal const string IncludeOnlyFilesModifiedInLastNDays = "IncludeOnlyFilesModifiedInLastNDays";
+            internal const string AutoCloseApp = "AutoCloseApp";
         }
     }
 }

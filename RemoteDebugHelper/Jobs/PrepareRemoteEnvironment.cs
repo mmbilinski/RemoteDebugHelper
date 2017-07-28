@@ -20,7 +20,7 @@ namespace RemoteDebugHelper
             _systemUtils = systemUtils;
         }
 
-        public void PleaseDoTheNeedful(RunArguments runArguments)
+        public void PleaseDoTheNeedful()
         {
             var sourcePath = _configuration.IntermediateZipDirectory;
             var zipName = new DirectoryInfo(sourcePath).GetFiles("bin_*.zip")

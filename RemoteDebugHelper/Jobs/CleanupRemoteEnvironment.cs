@@ -18,7 +18,7 @@ namespace RemoteDebugHelper
             _systemUtils = systemUtils;
         }
 
-        public void PleaseDoTheNeedful(RunArguments runArguments)
+        public void PleaseDoTheNeedful()
         {
             var websitePath = _configuration.RemoteWebsiteDirectory;
             var userInitials = _configuration.UserInitials;

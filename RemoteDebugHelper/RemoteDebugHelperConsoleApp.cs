@@ -37,7 +37,7 @@ namespace RemoteDebugHelper
 
             Console.WriteLine($"You are on {runArguments.Side} and I'll try to do {runArguments.Mode} action");
 
-            job.PleaseDoTheNeedful(runArguments);
+            job.PleaseDoTheNeedful();
 
             Console.Write("Done.");
 

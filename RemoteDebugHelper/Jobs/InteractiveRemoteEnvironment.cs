@@ -18,30 +18,30 @@ namespace RemoteDebugHelper
             _stopAppEvent = new ManualResetEvent(false);
         }
 
-        public void PleaseDoTheNeedful(RunArguments runArguments)
+        public void PleaseDoTheNeedful()
         {
             Console.CancelKeyPress += SetupCancelKeystroke;
 
-            StartDebuggingSession(runArguments);
+            StartDebuggingSession();
 
             _stopAppEvent.WaitOne();
 
-            FinishDebuggingSession(runArguments);
+            FinishDebuggingSession();
 
             Console.CancelKeyPress -= SetupCancelKeystroke;
         }
 
-        private void StartDebuggingSession(RunArguments runArguments)
+        private void StartDebuggingSession()
         {
             var jobStart = _jobFactory.GetJob(_container, Side.Env, Mode.Start);
-            jobStart.PleaseDoTheNeedful(runArguments);
+            jobStart.PleaseDoTheNeedful();
             Console.WriteLine("Debugging session started. Press Ctrl+C to finish.");
         }
 
-        private void FinishDebuggingSession(RunArguments runArguments)
+        private void FinishDebuggingSession()
         {
             var jobFinish = _jobFactory.GetJob(_container, Side.Env, Mode.Finish);
-            jobFinish.PleaseDoTheNeedful(runArguments);
+            jobFinish.PleaseDoTheNeedful();
             Console.WriteLine("Debugging session finished.");
         }
 

@@ -17,7 +17,7 @@ namespace RemoteDebugHelper
             _configuration = configuration;
         }
 
-        public void PleaseDoTheNeedful(RunArguments runArguments)
+        public void PleaseDoTheNeedful()
         {
             var targetPath = _configuration.IntermediateZipDirectory;
             var filesToAdd = GetFilesToTransfer();

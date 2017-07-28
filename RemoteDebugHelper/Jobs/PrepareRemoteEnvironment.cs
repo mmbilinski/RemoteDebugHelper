@@ -1,4 +1,5 @@
 using Ionic.Zip;
+using RemoteDebugHelper.Configuration;
 using System;
 using System.IO;
 using System.Linq;
@@ -8,20 +9,20 @@ namespace RemoteDebugHelper
     internal class PrepareRemoteEnvironment : IJob
     {
         private readonly IProgressSupport _progressSupport;
-        private readonly IConfigurationReader _configurationReader;
+        private readonly IConfiguration _configuration;
         private readonly ISystemUtils _systemUtils;
 
-        public PrepareRemoteEnvironment(IProgressSupport progressSupport, IConfigurationReader configurationReader,
+        public PrepareRemoteEnvironment(IProgressSupport progressSupport, IConfiguration configuration,
             ISystemUtils systemUtils)
         {
             _progressSupport = progressSupport;
-            _configurationReader = configurationReader;
+            _configuration = configuration;
             _systemUtils = systemUtils;
         }
 
         public void PleaseDoTheNeedful(RunArguments runArguments)
         {
-            var sourcePath = _configurationReader.GetValue(Consts.ConfigKeys.IntermediateZipDirectory);
+            var sourcePath = _configuration.IntermediateZipDirectory;
             var zipName = new DirectoryInfo(sourcePath).GetFiles("bin_*.zip")
                 .OrderByDescending(fi => fi.CreationTime)
                 .FirstOrDefault()
@@ -30,7 +31,7 @@ namespace RemoteDebugHelper
 
             if (string.IsNullOrWhiteSpace(zipName))
             {
-                if (_configurationReader.GetBoolValue(Consts.ConfigKeys.TryRestoreDebugBinariesWhenZipNotFound))
+                if (_configuration.TryRestoreDebugBinariesWhenZipNotFound)
                 {
                     // TODO
                     throw new NotImplementedException("This is not implemented for now.");
@@ -45,8 +46,8 @@ namespace RemoteDebugHelper
                 zipPath = Path.Combine(sourcePath, zipName);
             }
 
-            var websitePath = _configurationReader.GetValue(Consts.ConfigKeys.RemoteWebsiteDirectory);
-            var binProdFolderName =  _configurationReader.GetValue(Consts.ConfigKeys.BinDirectoryNameForProductionBinaries);
+            var websitePath = _configuration.RemoteWebsiteDirectory;
+            var binProdFolderName =  _configuration.BinDirectoryNameForProductionBinaries;
             var binProdPath = Path.Combine(websitePath, binProdFolderName);
             var binPath = Path.Combine(websitePath, "bin");
 

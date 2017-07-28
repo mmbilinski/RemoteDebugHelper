@@ -1,4 +1,5 @@
 using Ionic.Zip;
+using RemoteDebugHelper.Configuration;
 using System;
 using System.IO;
 using System.Linq;
@@ -8,17 +9,17 @@ namespace RemoteDebugHelper
     internal class CopyFilesToRemote : IJob
     {
         private readonly IProgressSupport _progressSupport;
-        private readonly IConfigurationReader _configurationReader;
+        private readonly IConfiguration _configuration;
 
-        public CopyFilesToRemote(IProgressSupport progressSupport, IConfigurationReader configurationReader)
+        public CopyFilesToRemote(IProgressSupport progressSupport, IConfiguration configuration)
         {
             _progressSupport = progressSupport;
-            _configurationReader = configurationReader;
+            _configuration = configuration;
         }
 
         public void PleaseDoTheNeedful(RunArguments runArguments)
         {
-            var targetPath = _configurationReader.GetValue(Consts.ConfigKeys.IntermediateZipDirectory);
+            var targetPath = _configuration.IntermediateZipDirectory;
             var filesToAdd = GetFilesToTransfer();
             var zipName = $"bin_{DateTime.Now:yyyyMMdd_HHmmss}.zip";
             var zipPath = Path.Combine(targetPath, zipName);
@@ -38,15 +39,15 @@ namespace RemoteDebugHelper
 
         private string[] GetFilesToTransfer()
         {
-            var sourcePath = _configurationReader.GetValue(Consts.ConfigKeys.LocalWebsiteBinDirectory);
-            var extsToAdd = _configurationReader.GetValue(Consts.ConfigKeys.TransferredExtensions).Split('|');
+            var sourcePath = _configuration.LocalWebsiteBinDirectory;
+            var extsToAdd = _configuration.TransferredExtensions.Split('|');
             var filesToTransfer = new DirectoryInfo(sourcePath).GetFiles().Where(f => extsToAdd.Contains(f.Extension));
-            var includeFilesFromLastNDays = _configurationReader.GetIntValue(Consts.ConfigKeys.IncludeOnlyFilesModifiedInLastNDays);
+            var includeFilesFromLastNDays = _configuration.IncludeOnlyFilesModifiedInLastNDays;
 
-            if (includeFilesFromLastNDays.HasValue && includeFilesFromLastNDays.Value >= 0)
+            if (includeFilesFromLastNDays >= 0)
             {
                 filesToTransfer = filesToTransfer
-                    .Where(f => f.LastWriteTime > DateTime.Today.AddDays(-includeFilesFromLastNDays.Value));
+                    .Where(f => f.LastWriteTime > DateTime.Today.AddDays(-includeFilesFromLastNDays));
             }
 
             return filesToTransfer.Select(f => f.FullName).ToArray();

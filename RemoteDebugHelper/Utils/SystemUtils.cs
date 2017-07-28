@@ -1,4 +1,5 @@
 using Microsoft.Web.Administration;
+using RemoteDebugHelper.Configuration;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -11,11 +12,11 @@ namespace RemoteDebugHelper
 {
     class SystemUtils : ISystemUtils
     {
-        private readonly IConfigurationReader _configurationReader;
+        private readonly IConfiguration _configuration;
 
-        public SystemUtils(IConfigurationReader configurationReader)
+        public SystemUtils(IConfiguration configuration)
         {
-            _configurationReader = configurationReader;
+            _configuration = configuration;
         }
 
         public bool IsAdministrator()
@@ -39,12 +40,12 @@ namespace RemoteDebugHelper
 
         public bool StartRemoteDebugger()
         {
-            var rdPath = _configurationReader.GetValue(Consts.ConfigKeys.RemoteDebuggerPath);
+            var rdPath = _configuration.RemoteDebuggerPath;
 
             if (!string.IsNullOrWhiteSpace(rdPath))
             {
-                var rdArgs = _configurationReader.GetValue(Consts.ConfigKeys.RemoteDebuggerParameters);
-                var minimizedWindow = _configurationReader.GetBoolValue(Consts.ConfigKeys.RemoteDebuggerMinimized);
+                var rdArgs = _configuration.RemoteDebuggerParameters;
+                var minimizedWindow = _configuration.RemoteDebuggerMinimized;
 
                 StartProcessAsAdmin(rdPath, new[] { rdArgs }, minimizedWindow);
             }
@@ -55,7 +56,7 @@ namespace RemoteDebugHelper
         public bool CloseRemoteDebugger(bool politely)
         {
             var result = true;
-            var rdPath = _configurationReader.GetValue(Consts.ConfigKeys.RemoteDebuggerPath);
+            var rdPath = _configuration.RemoteDebuggerPath;
 
             if (!string.IsNullOrWhiteSpace(rdPath))
             {
@@ -111,7 +112,7 @@ namespace RemoteDebugHelper
         {
             var sm = new ServerManager();
             var appPool = sm.ApplicationPools.SingleOrDefault(ap => string.Equals(ap.Name,
-                _configurationReader.GetValue(Consts.ConfigKeys.IisAppPoolName), StringComparison.OrdinalIgnoreCase));
+                _configuration.IisAppPoolName, StringComparison.OrdinalIgnoreCase));
 
             return appPool ?? throw new InvalidOperationException("App pool not found");
         }

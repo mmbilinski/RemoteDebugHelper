@@ -1,4 +1,5 @@
-﻿using SimpleInjector;
+﻿using RemoteDebugHelper.Configuration;
+using SimpleInjector;
 using System;
 using System.Reflection;
 
@@ -40,8 +41,8 @@ namespace RemoteDebugHelper
 
             Console.Write("Done.");
 
-            var configuration = container.GetInstance<IConfigurationReader>();
-            if (!configuration.GetBoolValue(Consts.ConfigKeys.AutoCloseApp))
+            var configuration = container.GetInstance<IConfiguration>();
+            if (!configuration.AutoCloseApp)
             {
                 Console.ReadKey(true);
             }
@@ -51,10 +52,10 @@ namespace RemoteDebugHelper
         {
             var container = new Container();
 
+            container.Register<IConfiguration, Configuration.Configuration>(Lifestyle.Singleton);
             container.Register<ISystemUtils, SystemUtils>();
             container.Register<ICommandLineSupport, CommandLineSupport>();
             container.Register<IProgressSupport, ConsoleProgressSupport>();
-            container.Register<IConfigurationReader, ConfigurationReader>();
             container.Register<IJobFactory, JobFactory>(Lifestyle.Singleton);
 
             container.Verify();

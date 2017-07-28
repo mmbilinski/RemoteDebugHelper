@@ -40,6 +40,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="Config.Net, Version=3.0.0.0, Culture=neutral, PublicKeyToken=d836a57afd299520, processorArchitecture=MSIL">
+      <HintPath>..\packages\Config.Net.3.2.6\lib\net451\Config.Net.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
     </Reference>
@@ -50,6 +53,12 @@
       <HintPath>..\packages\Goblinfactory.Konsole.3.0.1\lib\net45\Konsole.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="NetBox, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8dea52f811e261ef, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetBox.1.4.2\lib\net45\NetBox.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SimpleInjector, Version=4.0.8.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
       <HintPath>..\packages\SimpleInjector.4.0.8\lib\net45\SimpleInjector.dll</HintPath>
     </Reference>
@@ -64,18 +73,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Jobs\CleanupRemoteEnvironment.cs" />
     <Compile Include="Jobs\InteractiveRemoteEnvironment.cs" />
+    <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Utils\SystemUtils.cs" />
     <Compile Include="Utils\CommandLineSupport.cs" />
-    <Compile Include="Utils\ConfigurationReader.cs" />
     <Compile Include="Utils\ConsoleProgressSupport.cs" />
     <Compile Include="Utils\ISystemUtils.cs" />
     <Compile Include="Utils\IProgressSupport.cs" />
-    <Compile Include="Consts.cs" />
     <Compile Include="Jobs\JobFactory.cs" />
     <Compile Include="Jobs\PrepareRemoteEnvironment.cs" />
-    <Compile Include="Utils\IConfigurationReader.cs" />
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\IJobFactory.cs" />
     <Compile Include="Jobs\CopyFilesToRemote.cs" />
@@ -88,9 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="LocalConfiguration.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="LocalConfiguration.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

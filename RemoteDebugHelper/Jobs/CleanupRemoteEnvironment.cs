@@ -1,3 +1,4 @@
+using RemoteDebugHelper.Configuration;
 using System;
 using System.IO;
 
@@ -6,30 +7,30 @@ namespace RemoteDebugHelper
     internal class CleanupRemoteEnvironment : IJob
     {
         private readonly IProgressSupport _progressSupport;
-        private readonly IConfigurationReader _configurationReader;
+        private readonly IConfiguration _configuration;
         private readonly ISystemUtils _systemUtils;
 
-        public CleanupRemoteEnvironment(IProgressSupport progressSupport, IConfigurationReader configurationReader,
+        public CleanupRemoteEnvironment(IProgressSupport progressSupport, IConfiguration configuration,
             ISystemUtils systemUtils)
         {
             _progressSupport = progressSupport;
-            _configurationReader = configurationReader;
+            _configuration = configuration;
             _systemUtils = systemUtils;
         }
 
         public void PleaseDoTheNeedful(RunArguments runArguments)
         {
-            var websitePath = _configurationReader.GetValue(Consts.ConfigKeys.RemoteWebsiteDirectory);
-            var userInitials = _configurationReader.GetValue(Consts.ConfigKeys.UserInitials);
+            var websitePath = _configuration.RemoteWebsiteDirectory;
+            var userInitials = _configuration.UserInitials;
             var binInitialsPath = Path.Combine(websitePath, $"bin{userInitials}");
-            var binProdFolderName = _configurationReader.GetValue(Consts.ConfigKeys.BinDirectoryNameForProductionBinaries);
+            var binProdFolderName = _configuration.BinDirectoryNameForProductionBinaries;
             var binProdPath = Path.Combine(websitePath, binProdFolderName);
             var binPath = Path.Combine(websitePath, "bin");
 
             // if bin<initials> is already there, delete or rename it
             if (Directory.Exists(binInitialsPath))
             {
-                if (_configurationReader.GetBoolValue(Consts.ConfigKeys.KeepRemoteBinWithInitials))
+                if (_configuration.KeepRemoteBinWithInitials)
                 {
                     Directory.Move(binInitialsPath,
                     Path.Combine(websitePath, $"{binInitialsPath}_{DateTime.Now:yyyyMMdd_hhmmss}"));

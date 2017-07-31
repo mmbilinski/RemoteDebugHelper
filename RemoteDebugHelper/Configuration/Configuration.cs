@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection;
 
 namespace RemoteDebugHelper.Configuration
 {
@@ -22,7 +23,7 @@ namespace RemoteDebugHelper.Configuration
         private readonly Option<string> _remoteDebuggerPath = new Option<string>(nameof(RemoteDebuggerPath), string.Empty);
         private readonly Option<string> _remoteDebuggerParameters = new Option<string>(nameof(RemoteDebuggerParameters), string.Empty);
         private readonly Option<bool> _remoteDebuggerMinimized = new Option<bool>(nameof(RemoteDebuggerMinimized), false);
-        private readonly Option<int> _includeOnlyFilesModifiedInLastNDays = new Option<int>(nameof(LocalWebsiteBinDirectory), -1);
+        private readonly Option<int> _includeOnlyFilesModifiedInLastNDays = new Option<int>(nameof(IncludeOnlyFilesModifiedInLastNDays), -1);
         private readonly Option<bool> _autoCloseApp = new Option<bool>(nameof(AutoCloseApp), false);
 
         #endregion
@@ -58,7 +59,8 @@ namespace RemoteDebugHelper.Configuration
             configuration.UseJsonFile(homeConfigPath);
 
             // personalized settings
-            configuration.UseJsonFile("RemoteDebugHelperConfig.json");
+            var exeConfigPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "RemoteDebugHelperConfig.json");
+            configuration.UseJsonFile(exeConfigPath);
 
             // command line
             // TODO: replace current solution with Config.Net

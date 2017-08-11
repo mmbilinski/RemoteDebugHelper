@@ -9,6 +9,8 @@ namespace RemoteDebugHelper.Configuration
     [SuppressMessage("ReSharper", "UnassignedReadonlyField")]
     public class Configuration : SettingsContainer, IConfiguration
     {
+        private const string JsonConfigFileName = "RemoteDebugHelperConfig.json";
+
         #region Options
 
         private readonly Option<string> _localWebsiteBinDirectory = new Option<string>(nameof(LocalWebsiteBinDirectory), string.Empty);
@@ -54,13 +56,13 @@ namespace RemoteDebugHelper.Configuration
             // legacy configuration
             configuration.UseAppConfig();
 
-            // local settings
-            var homeConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "RemoteDebugHelperConfig.json");
-            configuration.UseJsonFile(homeConfigPath);
+            // general settings
+            var exeConfigPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), JsonConfigFileName);
+            configuration.UseJsonFile(exeConfigPath);
 
             // personalized settings
-            var exeConfigPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "RemoteDebugHelperConfig.json");
-            configuration.UseJsonFile(exeConfigPath);
+            var homeConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), JsonConfigFileName);
+            configuration.UseJsonFile(homeConfigPath);
 
             // command line
             // TODO: replace current solution with Config.Net

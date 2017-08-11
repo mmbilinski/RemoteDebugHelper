@@ -1,4 +1,5 @@
-﻿using Config.Net;
+﻿using CommandLine;
+using Config.Net;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -31,6 +32,11 @@ namespace RemoteDebugHelper.Configuration
         #endregion
 
         #region Properties
+
+        [Option('s', "Side", Required = true)]
+        public Side Side { get; set; }
+        [Option('m', "Mode")]
+        public Mode Mode { get; set; }
 
         public string LocalWebsiteBinDirectory => _localWebsiteBinDirectory.Value;
         public string RemoteWebsiteDirectory => _remoteWebsiteDirectory.Value;

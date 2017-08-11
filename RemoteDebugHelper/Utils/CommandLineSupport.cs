@@ -1,28 +1,35 @@
-using Fclp;
+using CommandLine;
+using CommandLine.Text;
+using RemoteDebugHelper.Configuration;
+using SimpleInjector;
 using System;
 
 namespace RemoteDebugHelper
 {
     class CommandLineSupport : ICommandLineSupport
     {
-        public RunArguments Setup(string[] args)
+        private readonly Container _container;
+
+        public CommandLineSupport(Container container)
         {
-            var argsParser = new FluentCommandLineParser<RunArguments>();
+            _container = container;
+        }
 
-            argsParser.Setup(a => a.Side)
-                .As('s', "side")
-                .Required()
-                .WithDescription("On which environment are you running?");
-            argsParser.Setup(a => a.Mode)
-                .As('m', "mode")
-                .SetDefault(Mode.Any)
-                .WithDescription("Are you starting or finishing?");
+        public IConfiguration Setup(string[] args)
+        {
+            var configuration = _container.GetInstance<Configuration.Configuration>();
 
-            var parseResult = argsParser.Parse(args);
-            if (parseResult.HasErrors)
-                throw new ArgumentException($"Invalid args: {parseResult.ErrorText}");
+            var parser = new Parser(s => 
+            {
+                s.CaseSensitive = false;
+                s.CaseInsensitiveEnumValues = true;
+            });
+            var parserResult = parser.ParseArguments(() => configuration, args);
 
-            return argsParser.Object;
+            if (parserResult.Tag == ParserResultType.Parsed)
+                return configuration;
+
+            throw new ArgumentException(HelpText.AutoBuild(parserResult));
         }
     }
 }

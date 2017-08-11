@@ -32,16 +32,15 @@ namespace RemoteDebugHelper
         private void RunApplication(Container container, string[] args)
         {
             var commandLineSupport = container.GetInstance<ICommandLineSupport>();
-            var runArguments = commandLineSupport.Setup(args);
-            var job = container.GetInstance<IJobFactory>().GetJob(container, runArguments.Side, runArguments.Mode);
+            var configuration = commandLineSupport.Setup(args);
+            var job = container.GetInstance<IJobFactory>().GetJob(container, configuration.Side, configuration.Mode);
 
-            Console.WriteLine($"You are on {runArguments.Side} and I'll try to do {runArguments.Mode} action");
+            Console.WriteLine($"You are on {configuration.Side} and I'll try to do {configuration.Mode} action");
 
             job.PleaseDoTheNeedful();
 
             Console.Write("Done.");
 
-            var configuration = container.GetInstance<IConfiguration>();
             if (!configuration.AutoCloseApp)
             {
                 Console.ReadKey(true);

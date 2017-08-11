@@ -2,6 +2,9 @@ namespace RemoteDebugHelper.Configuration
 {
     public interface IConfiguration
     {
+        Side Side { get; set; }
+        Mode Mode { get; set; }
+
         string LocalWebsiteBinDirectory { get; }
         string RemoteWebsiteDirectory { get; }
         string IntermediateZipDirectory { get; }

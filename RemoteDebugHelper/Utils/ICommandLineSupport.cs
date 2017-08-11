@@ -1,7 +1,9 @@
+using RemoteDebugHelper.Configuration;
+
 namespace RemoteDebugHelper
 {
     public interface ICommandLineSupport
     {
-        RunArguments Setup(string[] args);
+        IConfiguration Setup(string[] args);
     }
 }

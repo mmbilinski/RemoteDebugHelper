@@ -19,6 +19,10 @@ namespace RemoteDebugHelper
 
         public void PleaseDoTheNeedful()
         {
+            Console.WriteLine(_configuration.IncludeOnlyFilesModifiedInLastNDays >= 0
+                ? $"Taking changes from last {_configuration.IncludeOnlyFilesModifiedInLastNDays} days."
+                : "Taking all files without date filtering.");
+
             var targetPath = _configuration.IntermediateZipDirectory;
             var filesToAdd = GetFilesToTransfer();
             var zipName = $"bin_{DateTime.Now:yyyyMMdd_HHmmss}.zip";

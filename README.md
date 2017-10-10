@@ -78,7 +78,7 @@ It means, that each location could store some part of configuration (it could be
 	"RemoteDebuggerPath": "C:\\Program Files\\Microsoft Visual Studio 15.0\\Common7\\IDE\\Remote Debugger\\x64\\msvsmon.exe",
 	"RemoteDebuggerParameters": "-port 12345",
 	"RemoteDebuggerMinimized": true,
-	"IncludeOnlyFilesModifiedInLastNDays": -2,
+	"IncludeOnlyFilesModifiedInLastNDays": -1,
 	"AutoCloseApp": true
 }
 ```

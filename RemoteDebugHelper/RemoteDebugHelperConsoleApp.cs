@@ -1,4 +1,5 @@
-﻿using RemoteDebugHelper.Configuration;
+﻿using CommandLine;
+using RemoteDebugHelper.Configuration;
 using SimpleInjector;
 using System;
 using System.Reflection;
@@ -15,10 +16,17 @@ namespace RemoteDebugHelper
             {
                 var container = ConfigureContainer();
 
-                //if (!container.GetInstance<ISystemUtils>().EnsureRunningAsAdmin(args))
-                //    return;
+                if (!SetupConfiguration(container, args))
+                {
+                    return;
+                }
 
                 SetupJobFactory(container);
+
+                container.Verify();
+
+                //if (!container.GetInstance<ISystemUtils>().EnsureRunningAsAdmin(args))
+                //    return;
 
                 var app = new RemoteDebugHelperConsoleApp();
                 app.RunApplication(container, args);
@@ -29,10 +37,10 @@ namespace RemoteDebugHelper
             }
         }
 
+        
         private void RunApplication(Container container, string[] args)
         {
-            var commandLineSupport = container.GetInstance<ICommandLineSupport>();
-            var configuration = commandLineSupport.Setup(args);
+            var configuration = container.GetInstance<IConfiguration>();
             var job = container.GetInstance<IJobFactory>().GetJob(container, configuration.Side, configuration.Mode);
 
             Console.WriteLine($"You are on {configuration.Side} and I'll try to do {configuration.Mode} action");
@@ -51,15 +59,36 @@ namespace RemoteDebugHelper
         {
             var container = new Container();
 
-            container.Register<IConfiguration, Configuration.Configuration>(Lifestyle.Singleton);
             container.Register<ISystemUtils, SystemUtils>();
             container.Register<ICommandLineSupport, CommandLineSupport>();
             container.Register<IProgressSupport, ConsoleProgressSupport>();
             container.Register<IJobFactory, JobFactory>(Lifestyle.Singleton);
 
-            container.Verify();
-
             return container;
+        }
+
+        private static bool SetupConfiguration(Container container, string[] args)
+        {
+            var parser = new Parser(s =>
+            {
+                s.CaseSensitive = false;
+                s.CaseInsensitiveEnumValues = true;
+                s.HelpWriter = Console.Error;
+            });
+
+            IConfiguration configuration = parser.ParseArguments<Configuration.Configuration>(args)
+                .MapResult(
+                    config => config,
+                    errors => null);// throw new ArgumentException($"Invalid configuration:\n{string.Join(Environment.NewLine, errors)}"));
+
+            if (configuration != null)
+            {
+                container.Register(() => configuration, Lifestyle.Singleton);
+
+                return true;
+            }
+
+            return false;
         }
 
         private static void SetupJobFactory(Container container)

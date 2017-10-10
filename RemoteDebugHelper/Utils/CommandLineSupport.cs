@@ -1,5 +1,3 @@
-using CommandLine;
-using CommandLine.Text;
 using RemoteDebugHelper.Configuration;
 using SimpleInjector;
 using System;
@@ -17,19 +15,7 @@ namespace RemoteDebugHelper
 
         public IConfiguration Setup(string[] args)
         {
-            var configuration = _container.GetInstance<Configuration.Configuration>();
-
-            var parser = new Parser(s => 
-            {
-                s.CaseSensitive = false;
-                s.CaseInsensitiveEnumValues = true;
-            });
-            var parserResult = parser.ParseArguments(() => configuration, args);
-
-            if (parserResult.Tag == ParserResultType.Parsed)
-                return configuration;
-
-            throw new ArgumentException(HelpText.AutoBuild(parserResult));
+            throw new NotSupportedException("Not supported for now");
         }
     }
 }

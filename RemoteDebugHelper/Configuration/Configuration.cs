@@ -63,8 +63,8 @@ namespace RemoteDebugHelper.Configuration
         [Option]
         public string RemoteWebsiteDirectory
         {
-            get => _localWebsiteBinDirectory ?? _localWebsiteBinDirectoryConfig.Value;
-            set => _localWebsiteBinDirectory = value;
+            get => _remoteWebsiteDirectory ?? _remoteWebsiteDirectoryConfig.Value;
+            set => _remoteWebsiteDirectory = value;
         }
 
         private string _intermediateZipDirectory;

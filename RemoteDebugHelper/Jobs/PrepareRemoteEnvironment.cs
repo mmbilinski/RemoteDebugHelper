@@ -20,6 +20,8 @@ namespace RemoteDebugHelper
             _systemUtils = systemUtils;
         }
 
+        public bool RequiresAdministratorRights => true;
+
         public void PleaseDoTheNeedful()
         {
             var sourcePath = _configuration.IntermediateZipDirectory;

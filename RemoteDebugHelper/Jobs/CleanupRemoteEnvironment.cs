@@ -18,6 +18,8 @@ namespace RemoteDebugHelper
             _systemUtils = systemUtils;
         }
 
+        public bool RequiresAdministratorRights => true;
+
         public void PleaseDoTheNeedful()
         {
             var websitePath = _configuration.RemoteWebsiteDirectory;

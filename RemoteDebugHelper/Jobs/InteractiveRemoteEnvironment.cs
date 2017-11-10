@@ -18,6 +18,8 @@ namespace RemoteDebugHelper
             _stopAppEvent = new ManualResetEvent(false);
         }
 
+        public bool RequiresAdministratorRights => true;
+
         public void PleaseDoTheNeedful()
         {
             Console.CancelKeyPress += SetupCancelKeystroke;

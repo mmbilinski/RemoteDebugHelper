@@ -17,6 +17,8 @@ namespace RemoteDebugHelper
             _configuration = configuration;
         }
 
+        public bool RequiresAdministratorRights => false;
+
         public void PleaseDoTheNeedful()
         {
             Console.WriteLine(_configuration.IncludeOnlyFilesModifiedInLastNDays >= 0

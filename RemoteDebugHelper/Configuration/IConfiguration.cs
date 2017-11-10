@@ -6,6 +6,7 @@ namespace RemoteDebugHelper.Configuration
         Mode Mode { get; set; }
 
         string LocalWebsiteBinDirectory { get; }
+        string[] LocalDirectories { get; }
         string RemoteWebsiteDirectory { get; }
         string IntermediateZipDirectory { get; }
         string TransferredExtensions { get; }

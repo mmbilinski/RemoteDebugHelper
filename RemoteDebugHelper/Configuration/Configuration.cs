@@ -17,6 +17,7 @@ namespace RemoteDebugHelper.Configuration
         private readonly Option<Side> _sideConfig = new Option<Side>(nameof(Side), Side.Dev);
         private readonly Option<Mode> _modeConfig = new Option<Mode>(nameof(Mode), Mode.Any);
         private readonly Option<string> _localWebsiteBinDirectoryConfig = new Option<string>(nameof(LocalWebsiteBinDirectory), string.Empty);
+        private readonly Option<string[]> _localDirectoriesConfig = new Option<string[]>(nameof(LocalDirectories), new string[0]);
         private readonly Option<string> _remoteWebsiteDirectoryConfig = new Option<string>(nameof(RemoteWebsiteDirectory), string.Empty);
         private readonly Option<string> _intermediateZipDirectoryConfig = new Option<string>(nameof(IntermediateZipDirectory), string.Empty);
         private readonly Option<string> _transferredExtensionsConfig = new Option<string>(nameof(TransferredExtensions), string.Empty);
@@ -57,6 +58,14 @@ namespace RemoteDebugHelper.Configuration
         {
             get => _localWebsiteBinDirectory ?? _localWebsiteBinDirectoryConfig.Value;
             set => _localWebsiteBinDirectory = value;
+        }
+
+        private string[] _localDirectories;
+        [Option]
+        public string[] LocalDirectories
+        {
+            get => _localDirectories ?? _localDirectoriesConfig.Value;
+            set => _localDirectories = value;
         }
 
         private string _remoteWebsiteDirectory;

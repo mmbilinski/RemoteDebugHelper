@@ -28,14 +28,18 @@ namespace RemoteDebugHelper
 
         public bool EnsureRunningAsAdmin(string[] args)
         {
-            if (!IsAdministrator())
+            if (IsAdministrator())
             {
-                StartProcessAsAdmin(Assembly.GetExecutingAssembly().Location, args);
-
-                return false;
+                Console.WriteLine("You're an admin.");
+                return true;
             }
 
-            return true;
+            Console.WriteLine("Trying to restart as admin...");
+
+            if (!StartProcessAsAdmin(Assembly.GetEntryAssembly().Location, args))
+                throw new InvalidOperationException("Unable to start a new process as admin.");
+
+            return false;
         }
 
         public bool StartRemoteDebugger()

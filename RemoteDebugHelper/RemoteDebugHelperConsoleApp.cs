@@ -25,9 +25,6 @@ namespace RemoteDebugHelper
 
                 container.Verify();
 
-                //if (!container.GetInstance<ISystemUtils>().EnsureRunningAsAdmin(args))
-                //    return;
-
                 var app = new RemoteDebugHelperConsoleApp();
                 app.RunApplication(container, args);
             }
@@ -36,12 +33,14 @@ namespace RemoteDebugHelper
                 Console.WriteLine(e.Message);
             }
         }
-
         
         private void RunApplication(Container container, string[] args)
         {
             var configuration = container.GetInstance<IConfiguration>();
             var job = container.GetInstance<IJobFactory>().GetJob(container, configuration.Side, configuration.Mode);
+
+            if (job.RequiresAdministratorRights && !container.GetInstance<ISystemUtils>().EnsureRunningAsAdmin(args))
+                return;
 
             Console.WriteLine($"You are on {configuration.Side} and I'll try to do {configuration.Mode} action");
 

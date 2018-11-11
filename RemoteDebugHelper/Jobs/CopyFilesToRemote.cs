@@ -17,10 +17,12 @@ namespace RemoteDebugHelper
             _configuration = configuration;
         }
 
+        public bool RequiresAdministratorRights => false;
+
         public void PleaseDoTheNeedful()
         {
             Console.WriteLine(_configuration.IncludeOnlyFilesModifiedInLastNDays >= 0
-                ? $"Taking changes from last {_configuration.IncludeOnlyFilesModifiedInLastNDays} days."
+                ? $"Taking changes from last {_configuration.IncludeOnlyFilesModifiedInLastNDays} day(s)."
                 : "Taking all files without date filtering.");
 
             var targetPath = _configuration.IntermediateZipDirectory;
@@ -37,7 +39,7 @@ namespace RemoteDebugHelper
                 zip.SaveProgress += (obj, spe) => { if (spe.EntriesSaved > 0) _progressSupport.ChangeProgress(spe.EntriesSaved, spe.CurrentEntry.FileName); };
                 zip.AddFiles(filesToAdd, string.Empty);
                 zip.Save();
-                Console.WriteLine("ZIP created.");
+                Console.WriteLine($"{zipName} created.");
             }
         }
 

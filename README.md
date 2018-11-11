@@ -1,5 +1,7 @@
 # RemoteDebugHelper
 
+![Build status](https://ci.appveyor.com/api/projects/status/github/mmbilinski/RemoteDebugHelper?branch=master&svg=true)
+
 ## Usage
 
     RemoteDebugHelper <-s dev|env> [-m start|finish|interactive]

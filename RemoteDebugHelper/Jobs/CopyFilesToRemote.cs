@@ -37,8 +37,17 @@ namespace RemoteDebugHelper
                 zip.SaveProgress += (obj, spe) => { if (spe.EntriesSaved > 0) _progressSupport.ChangeProgress(spe.EntriesSaved, spe.CurrentEntry.FileName); };
                 zip.AddFiles(filesToAdd, string.Empty);
                 zip.Save();
-                Console.WriteLine("ZIP created");
+                Console.WriteLine("ZIP created.");
             }
+        }
+
+        public void ValidateConfiguration()
+        {
+            if (_configuration == null)
+                throw new JobException("Configuration not set");
+
+            ConfigurationValidator.ValidateDirectoryPath(_configuration.IntermediateZipDirectory, nameof(_configuration.IntermediateZipDirectory));
+
         }
 
         private string[] GetFilesToTransfer()

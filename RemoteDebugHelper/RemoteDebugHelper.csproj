@@ -77,10 +77,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationValidator.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Jobs\CleanupRemoteEnvironment.cs" />
     <Compile Include="Jobs\InteractiveRemoteEnvironment.cs" />
     <Compile Include="Configuration\Configuration.cs" />
+    <Compile Include="Jobs\JobException.cs" />
     <Compile Include="Utils\SystemUtils.cs" />
     <Compile Include="Utils\CommandLineSupport.cs" />
     <Compile Include="Utils\ConsoleProgressSupport.cs" />
@@ -99,7 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="LocalConfiguration.config" />
+    <None Include="LocalConfiguration.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

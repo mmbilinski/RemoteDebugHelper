@@ -59,5 +59,10 @@ namespace RemoteDebugHelper
             // close remote debugger
             _systemUtils.CloseRemoteDebugger(true);
         }
+
+        public void ValidateConfiguration()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

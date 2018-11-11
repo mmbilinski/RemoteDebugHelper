@@ -31,6 +31,11 @@ namespace RemoteDebugHelper
             Console.CancelKeyPress -= SetupCancelKeystroke;
         }
 
+        public void ValidateConfiguration()
+        {
+            throw new NotImplementedException();
+        }
+
         private void StartDebuggingSession()
         {
             var jobStart = _jobFactory.GetJob(_container, Side.Env, Mode.Start);

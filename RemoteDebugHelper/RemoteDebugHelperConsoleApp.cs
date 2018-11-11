@@ -45,6 +45,7 @@ namespace RemoteDebugHelper
 
             Console.WriteLine($"You are on {configuration.Side} and I'll try to do {configuration.Mode} action");
 
+            job.ValidateConfiguration();
             job.PleaseDoTheNeedful();
 
             Console.Write("Done.");

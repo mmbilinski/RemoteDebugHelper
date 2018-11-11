@@ -81,6 +81,11 @@ namespace RemoteDebugHelper
             }
         }
 
+        public void ValidateConfiguration()
+        {
+            throw new NotImplementedException();
+        }
+
         private void CreateDirectoryCopy(string sourcePath, string targetPath)
         {
             foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
